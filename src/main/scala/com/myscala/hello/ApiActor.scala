@@ -1,6 +1,5 @@
 package com.myscala.hello
 
-import akka.actor.Actor.Receive
 import spray.json._
 import spray.json.DefaultJsonProtocol._
 import akka.actor._
@@ -14,11 +13,15 @@ object ApiActor {
 class ApiActor extends HttpServiceActor {
 
   def receive = runRoute(
-    path("hello") {
-     get {
-       complete("haha")
-     }
+
+    pathPrefix("oauth") {
+      (get & path("callback") & parameter("code")) {
+        (code) => complete(code)
+      }
+    } ~ (path("hello") & get) {
+      complete("haha")
     }
+
   )
 
 }
