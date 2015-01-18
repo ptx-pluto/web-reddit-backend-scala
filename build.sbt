@@ -8,7 +8,8 @@ resolvers ++= Seq(
   "Sonatype Releases"   at "http://oss.sonatype.org/content/repositories/releases",
   "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
   "Spray Repository"    at "http://repo.spray.io/",
-  "Spray Nightlies"     at "http://nightlies.spray.io/"
+  "Spray Nightlies"     at "http://nightlies.spray.io/",
+  "rediscala" at "http://dl.bintray.com/etaty/maven"
 )
 
 libraryDependencies ++= {
@@ -19,6 +20,7 @@ libraryDependencies ++= {
     "io.spray" %%  "spray-can" % sprayVersion,
     "io.spray" %%  "spray-routing" % sprayVersion,
     "io.spray" %%  "spray-client" % sprayVersion,
-    "io.spray" %%  "spray-json" % "1.3.1"
+    "io.spray" %%  "spray-json" % "1.3.1",
+    "com.etaty.rediscala" %% "rediscala" % "1.4.0"
   )
 }
