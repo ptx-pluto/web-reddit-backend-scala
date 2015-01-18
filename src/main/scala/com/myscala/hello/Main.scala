@@ -9,7 +9,9 @@ object Main extends App {
 
   implicit val system = ActorSystem("demo")
 
-  RedisTest.test(system)
+  RedisTest.test
+
+  HttpClientTest.test
 
   val api = system.actorOf(ApiActor.props, "api-actor")
 
