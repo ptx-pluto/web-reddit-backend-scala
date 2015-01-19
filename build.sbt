@@ -20,6 +20,7 @@ libraryDependencies ++= {
     "io.spray" %%  "spray-can" % sprayVersion,
     "io.spray" %%  "spray-routing" % sprayVersion,
     "io.spray" %%  "spray-client" % sprayVersion,
+    "io.spray" %%  "spray-httpx" % sprayVersion,
     "io.spray" %%  "spray-json" % "1.3.1",
     "com.etaty.rediscala" %% "rediscala" % "1.4.0"
   )

@@ -11,7 +11,9 @@ object Main extends App {
 
   RedisTest.test
 
-  HttpClientTest.test
+//  HttpClientTest.test
+
+  HttpClientTest.testsubreddit
 
   val api = system.actorOf(ApiActor.props, "api-actor")
 
