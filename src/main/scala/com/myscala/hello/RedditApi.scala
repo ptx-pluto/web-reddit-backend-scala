@@ -26,9 +26,16 @@ object RedditJsonProtocols extends DefaultJsonProtocol {
         .asJsObject
         .fields("data")
         .asJsObject
-        .fields("children")
+        .getFields("children", "after", "before")
       match {
-        case JsArray(feeds) => Listing(feeds map { entry => entry.asJsObject.fields("data").convertTo[Feed] })
+        case Seq(JsArray(feeds), JsString(after), before) => Listing(
+          before match {
+            case JsString(b) => Some(b)
+            case JsNull => None
+          },
+          after,
+          feeds map { entry => entry.asJsObject.fields("data").convertTo[Feed] }
+        )
       }
   }
 
@@ -38,4 +45,4 @@ object RedditApi {}
 
 case class Feed(id: String, title: String)
 
-case class Listing(data: Vector[Feed])
+case class Listing(before: Option[String], after: String, data: Vector[Feed])
