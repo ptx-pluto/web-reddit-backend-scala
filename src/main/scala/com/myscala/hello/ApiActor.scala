@@ -2,7 +2,7 @@ package com.myscala.hello
 
 import spray.http.StatusCodes
 import spray.http.Uri
-import spray.http.Uri.{Path, Authority}
+import spray.http.Uri._
 import spray.json._
 import spray.json.DefaultJsonProtocol._
 import akka.actor._
@@ -24,7 +24,9 @@ class ApiActor extends HttpServiceActor {
     } ~ (path("hello") & get) {
       complete("haha")
     } ~ (path("google") & get) {
-      redirect("http://google.com", StatusCodes.TemporaryRedirect)
+
+      //val u = Uri("http", "localhost", "#/oauth/token", token->"")
+      redirect("http://google.com", StatusCodes.Found)
     }
 
   )

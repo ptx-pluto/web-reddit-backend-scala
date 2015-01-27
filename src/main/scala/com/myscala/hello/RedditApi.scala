@@ -46,3 +46,5 @@ object RedditApi {}
 case class Feed(id: String, title: String)
 
 case class Listing(before: Option[String], after: String, data: Vector[Feed])
+
+case class AccessToken(token: String)
