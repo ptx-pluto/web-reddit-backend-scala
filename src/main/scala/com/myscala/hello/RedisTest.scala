@@ -4,9 +4,27 @@ import akka.actor.ActorSystem
 import redis.RedisClient
 import scala.util.{Success, Failure}
 import scala.concurrent.ExecutionContext.Implicits.global
+import akka.util.ByteString
+import redis.{ByteStringSerializer, ByteStringFormatter}
 
+
+case class OauthCode(token: String)
+
+object OauthCode {
+
+  implicit val byteStringFormatter = new ByteStringFormatter[OauthCode] {
+
+    override def serialize(data: OauthCode): ByteString = ByteString(data.token)
+
+    override def deserialize(bs: ByteString): OauthCode = OauthCode(bs.utf8String)
+
+  }
+
+}
 
 object RedisTest {
+
+  import OauthCode._
 
   def test(implicit sys: ActorSystem) = {
 
