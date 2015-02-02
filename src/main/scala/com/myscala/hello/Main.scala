@@ -3,16 +3,19 @@ package com.myscala.hello
 import akka.actor._
 import akka.io.IO
 import akka.util.ByteString
+
 import concurrent.Future
-import spray.can.Http
-import spray.http.Uri._
+import concurrent.ExecutionContext.Implicits.global
+
 import spray.routing._
-import redis.{ByteStringFormatter, RedisClient}
-import spray.client.pipelining._
-import scala.concurrent.ExecutionContext.Implicits.global
 import spray.json._
-import spray.httpx.SprayJsonSupport._
 import spray.http._
+import spray.http.Uri._
+import spray.can.Http
+import spray.client.pipelining._
+import spray.httpx.SprayJsonSupport._
+
+import redis.{ByteStringFormatter, RedisClient}
 
 
 object Main extends App {
