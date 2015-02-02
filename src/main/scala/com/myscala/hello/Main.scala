@@ -3,7 +3,7 @@ package com.myscala.hello
 import akka.actor._
 import akka.io.IO
 import akka.util.ByteString
-
+import scala.util.{Success, Failure}
 import concurrent.Future
 import concurrent.ExecutionContext.Implicits.global
 
@@ -11,11 +11,14 @@ import spray.routing._
 import spray.json._
 import spray.http._
 import spray.http.Uri._
+import StatusCodes.NotFound
 import spray.can.Http
 import spray.client.pipelining._
 import spray.httpx.SprayJsonSupport._
 
 import redis.{ByteStringFormatter, RedisClient}
+
+import RedditJsonProtocols._
 
 
 object Main extends App {
@@ -39,14 +42,20 @@ class ApiActor extends HttpServiceActor with RedditOauthHandler {
       (get & path("callback") & parameters("code", "state")) {
         (code, state) => {
           registerToken(RedditLoginResponse(state, code))
-          complete("sended")
+          redirect("/redirects/close.html", StatusCodes.Found)
+        }
+      } ~ (get & path("token") & parameters("uuid")) {
+        uuid => { ctx =>
+          queryToken(uuid) onComplete {
+            case Success(Some(token: RedditToken)) => ctx.complete(token)
+            case _ => ctx.complete(NotFound)
+          }
+
         }
       }
     } ~ (path("hello") & get) {
-      complete("haha")
-    } ~ (path("google") & get) {
-      redirect("http://google.com", StatusCodes.Found)
-    }
+      complete("hello world")
+    } ~ complete(NotFound)
 
   )
 
@@ -54,8 +63,6 @@ class ApiActor extends HttpServiceActor with RedditOauthHandler {
 
 
 trait RedditOauthHandler {
-
-  import RedditJsonProtocols.tokenFormat
 
   implicit val defaultSystem: ActorSystem
 
@@ -83,7 +90,9 @@ trait RedditOauthHandler {
       token <- fetchToken(resp)
       stored <- redis.set[RedditToken](resp.state, token)
     } yield {
-      println("token stored")
+      val tk = token.toString
+      val uuid = resp.state
+      println(s"$tk stored at $uuid")
     }
 
   }
@@ -92,9 +101,9 @@ trait RedditOauthHandler {
 
     val pipeline: HttpRequest => Future[RedditToken] = (
       addCredentials(BasicHttpCredentials(client_id, client_secret))
-        ~> logRequest {req => println(req)}
+        ~> logRequest { req => println(req) }
         ~> sendReceive
-        ~> logResponse {resp => println(resp)}
+        ~> logResponse { resp => println(resp) }
         ~> unmarshal[RedditToken]
       )
 
