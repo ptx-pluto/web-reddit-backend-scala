@@ -51,6 +51,6 @@ case class Feed(id: String, title: String)
 
 case class Listing(before: Option[String], after: String, data: Vector[Feed])
 
-case class RedditToken(access_token: String, refresh_token: String, token_type: String, expire_in: Int, scope: String)
+case class RedditToken(access_token: String, refresh_token: String, token_type: String, expires_in: Int, scope: String)
 
 case class RedditLoginResponse(state: String, code: String)

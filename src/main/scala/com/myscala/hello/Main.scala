@@ -78,12 +78,14 @@ trait RedditOauthHandler {
   }
 
   def registerToken(resp: RedditLoginResponse): Unit = {
+
     for {
       token <- fetchToken(resp)
-      stored <- redis.set(resp.state, token.toJson.toString())
+      stored <- redis.set[RedditToken](resp.state, token)
     } yield {
       println("token stored")
     }
+
   }
 
   def fetchToken(resp: RedditLoginResponse): Future[RedditToken] = {
