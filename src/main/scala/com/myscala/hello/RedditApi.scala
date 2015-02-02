@@ -39,6 +39,10 @@ object RedditJsonProtocols extends DefaultJsonProtocol {
       }
   }
 
+  implicit val tokenFormat = jsonFormat2(RedditToken)
+
+  implicit val oauthCallbackFormat = jsonFormat2(RedditLoginResponse)
+
 }
 
 object RedditApi {}
@@ -47,4 +51,6 @@ case class Feed(id: String, title: String)
 
 case class Listing(before: Option[String], after: String, data: Vector[Feed])
 
-case class AccessToken(token: String)
+case class RedditToken(access_token: String, refresh_token: String)
+
+case class RedditLoginResponse(state: String, code: String)
