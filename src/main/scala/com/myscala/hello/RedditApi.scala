@@ -14,6 +14,7 @@ object RedditJsonProtocols extends DefaultJsonProtocol {
         .getFields("id", "title")
       match {
         case Seq(JsString(id), JsString(title)) => Feed(id, title)
+        case _ => deserializationError("Bad format")
       }
   }
 
@@ -32,6 +33,7 @@ object RedditJsonProtocols extends DefaultJsonProtocol {
           before match {
             case JsString(b) => Some(b)
             case JsNull => None
+            case _ => deserializationError("Bad format")
           },
           after,
           feeds map { entry => entry.asJsObject.fields("data").convertTo[Feed] }
