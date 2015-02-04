@@ -34,7 +34,7 @@ object Main extends App {
 
 class ApiActor extends HttpServiceActor with RedditOauthHandler {
 
-  implicit val defaultSystem = context.system
+  implicit val system = context.system
 
   def receive = runRoute(
 
@@ -50,11 +50,8 @@ class ApiActor extends HttpServiceActor with RedditOauthHandler {
             case Success(Some(token: RedditToken)) => ctx.complete(token)
             case _ => ctx.complete(NotFound)
           }
-
         }
       }
-    } ~ (path("hello") & get) {
-      complete("hello world")
     } ~ complete(NotFound)
 
   )
@@ -64,7 +61,7 @@ class ApiActor extends HttpServiceActor with RedditOauthHandler {
 
 trait RedditOauthHandler {
 
-  implicit val defaultSystem: ActorSystem
+  implicit val system: ActorSystem
 
   lazy val redis = RedisClient()
 
