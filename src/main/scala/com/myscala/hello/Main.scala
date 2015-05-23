@@ -108,7 +108,7 @@ trait RedditOauthHandler {
       "state" -> resp.state,
       "clent_id" -> client_id,
       "grant_type" -> "authorization_code",
-      "redirect_uri" -> "http://reddit.localhost/api/oauth/callback",
+      "redirect_uri" -> "http://webreddit.ptx.digital/api/oauth/callback",
       "code" -> resp.code
     )))
 
